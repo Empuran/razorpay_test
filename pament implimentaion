@@ -1,0 +1,38 @@
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+
+class RazerPayImp {
+  Razorpay? _razorpay;
+
+  RazerPayImp() {
+    _razorpay = Razorpay();
+    _razorpay!.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay!.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay!.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  void checkOut() {
+ 
+   var options = {
+              'key': '<API KEY>',
+              'amount': int.parse(_amount!.text),
+              'name': 'T-Shirt',
+              'description': 'Fine T-Shirt',
+              'prefill': {
+                  'contact': '9539884696',
+                  'email': 'jaya1999sankar@gmail.com' }
+               };
+    _razorpay!.open(options);
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    print("SUCCESS ${response.paymentId}");
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    print("FAILED ${response.message}");
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    print("EVENT_EXTERNAL_WALLET ${response.walletName}");
+  }
+}
